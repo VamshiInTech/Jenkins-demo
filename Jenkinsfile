@@ -1,20 +1,20 @@
 pipeline {
     agent any
 
+    environment{
+          App_Version = 1.1.0
+          Deploy_New = "Stagging"
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo "✅ Build Stage Started"
-            }
-        }
-        stage('Test') {
-            steps {
-                echo "✅ Test Stage Running"
+                echo "building App version ${App_Version}"
             }
         }
         stage('Deploy') {
             steps {
-                echo "✅ Deploy Stage Completed"
+                echo "Deploying to ${Deploy_New} environment"
             }
         }
     }
