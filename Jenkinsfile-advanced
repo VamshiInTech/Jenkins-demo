@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = "MyApp"
+        BUILD_TIME = "${new Date().format('yyyy-MM-dd HH:mm:ss')}"
+        DEPLOY_ENV = "production"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "🔨 Building ${APP_NAME} at ${BUILD_TIME}"
+                sh 'echo "Compiling code..."'
+                sh 'sleep 2'
+                sh 'echo "Build successful!"'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "🧪 Running tests..."
+                sh 'echo "All tests passed!"'
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
+            }
+            steps {
+                echo "🚀 Deploying ${APP_NAME} to ${DEPLOY_ENV}..."
+                sh 'sleep 2'
+                sh 'echo "Deployed successfully!"'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Pipeline completed successfully at ${BUILD_TIME}"
+        }
+        failure {
+            echo "❌ Pipeline failed at ${BUILD_TIME}"
+        }
+        always {
+            echo "📝 Build summary for ${APP_NAME} (Env: ${DEPLOY_ENV})"
+        }
+    }
+}
